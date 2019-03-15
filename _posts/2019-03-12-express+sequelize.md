@@ -1,8 +1,10 @@
 ---
 layout: post
 title:  "2019-03-12-express+sequelize"
-date:   2019-03-12 14:43:45 +0700
-categories: [python, codefights]
+date:   2019-03-12 14:43:45
+author: Ben Centra
+categories: Dummy
+tags: lorem ipsum
 ---
 
 ## 시퀄라이저의 특징
