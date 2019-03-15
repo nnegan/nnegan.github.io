@@ -2,9 +2,9 @@
 layout: post
 title:  "2019-03-06-DynamoDB Local 설치"
 date:   2019-03-06 11:24:10
-author: Ben Centra
-categories: Dummy
-tags: lorem ipsum
+author: negan k
+categories: Infra
+tags: aws
 ---
 
 # DynamoDB local 설치

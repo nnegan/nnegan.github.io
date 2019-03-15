@@ -2,9 +2,9 @@
 layout: post
 title:  "2019-03-07-nodejs+express+mysql+이클립스"
 date:   2019-03-07 15:12:10
-author: Ben Centra
-categories: Dummy
-tags: lorem ipsum
+author: negan k
+categories: Nodejs
+tags: nodjs dev
 ---
 
 ## 1. Node.js 설치
