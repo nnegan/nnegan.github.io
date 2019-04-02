@@ -1,0 +1,109 @@
+version: '3.4'
+services:
+
+  Redis:  #캐시
+    image: sameersbn/redis:4.0.9-1
+    ports:
+      - "6379:6379"
+    volumes:
+      - /srv/docker/redis:/var/lib/redis
+    restart: always
+
+  mariadb: #RDB
+    image: mariadb:10.2
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: passwd
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: passwd
+    restart: always
+    volumes:
+     - /srv/docker/mariadb:/var/lib/mysql    
+
+  zookeeper: 
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    hostname: zookeeper
+  kafka: #큐
+    image: wurstmeister/kafka
+    command: [start-kafka.sh]
+    ports:
+      - "9092:9092"
+    hostname: kafka
+    environment:
+      KAFKA_CREATE_TOPICS: "UploadFile:1:1,GetFile:1:1,TrackUpload:1:1,GetEmailContent:1:1" # topic:partition:replicas
+      KAFKA_ADVERTISED_HOST_NAME: kafka # docker-machine ip
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - "zookeeper"
+
+  elasticsearch: #검색엔진
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+    - 9200:9200
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.2
+    ports:
+      - "5601:5601"    
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - /srv/docker/data/db:/data/db
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "/"
+  
+  dynamo:
+    image: "cnadiminti/dynamodb-local"
+    volumes:
+      - /data/dynamodb:/dynamodb_local_db
+    ports:
+      - "8000:8000"
+#  server:
+#    image: "node:8"
+#    user: node
+#    working_dir: /home/node/server
+#    environment:
+#      DYNAMO_ENDPOINT: http://dynamo:8000
+      # Note: even though these keys are garbage values, access key and
+      # secret key are still required. Otherwise, `aws-sdk` will attempt
+      # to read credentials from Amazon's `169.254.169.254` service and
+      # fail.
+#      AWS_ACCESS_KEY_ID: "abc"
+#      AWS_SECRET_ACCESS_KEY: "def"
+#    depends_on:
+#      - dynamo
+#    links:
+#      - "dynamo:dynamo"
+#    volumes:
+#      - ./packages:/home/node
+#    command: npm run dev
