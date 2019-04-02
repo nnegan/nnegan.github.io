@@ -24,19 +24,19 @@ tags: nodjs dev
 
 
 npm을 통해 Express generator를 먼저 설치합니다. (global로 추가하기 위해 -g 옵션을 사용합니다.)
-~~~
-npm install express-generator -g
+~~~bash
+> npm install express-generator -g
 ~~~
 
 Express generator를 사용해서 프로젝트를 생성합니다. 
-~~~
-express TestSeq
+~~~bash
+> express TestSeq
 ~~~
 
 폴더를 이동하여 모듈 설치
-~~~
-cd TestSeq
-npm install
+~~~bash
+> cd TestSeq
+> npm install
 ~~~
 
 생성된 프로젝트 구조
@@ -63,10 +63,10 @@ npm install
 **2. sequelize install**
 
 경로 이동 후 npm 추가 설치
-~~~
-npm i sequelize mysql2
-npm i -g sequelize-cli
-sequelize init
+~~~bash
+> npm i sequelize mysql2
+> npm i -g sequelize-cli
+> sequelize init
 ~~~
 
 자동으로 필요한 파일들이 생성된다.
@@ -104,13 +104,13 @@ config/config.json 파일은 시퀄라이저가 DB에 접근하는 정보를 저
 **4. DB 테이블을 자동으로 models폴더에 js파일로 생성**
 
 1) 테이블 단위로 js 생성
-~~~
-npm install -g sequelize-auto
-npm install -g mysql
+~~~bash
+> npm install -g sequelize-auto
+> npm install -g mysql
 ~~~
 
-~~~
-sequelize-auto -o "./models" -d db명 -h localhost -u 유져명 -p 3306 -x 비밀번호 -e mysql
+~~~bash
+> sequelize-auto -o "./models" -d db명 -h localhost -u 유져명 -p 3306 -x 비밀번호 -e mysql
 ~~~
 
 2) js파일 수정
